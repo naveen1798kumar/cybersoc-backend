@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import blogRoutes from './routes/blogRoutes.js'; // Route handler for blogs
 
+
 dotenv.config();
 
 const app = express();
