@@ -9,7 +9,8 @@ dotenv.config();
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' })); // Increase limit to 10mb
+app.use(express.urlencoded({ limit: '10mb', extended: true })); // For form data
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/cyber-soc', {

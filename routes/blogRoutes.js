@@ -24,6 +24,17 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// GET blog by slug
+router.get('/slug/:slug', async (req, res) => {
+  try {
+    const blog = await Blog.findOne({ slug: req.params.slug });
+    if (!blog) return res.status(404).json({ message: 'Blog not found' });
+    res.json(blog);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 // POST new blog
 router.post('/', async (req, res) => {
   try {
