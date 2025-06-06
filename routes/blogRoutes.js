@@ -1,69 +1,55 @@
 import express from 'express';
-import Blog from '../model/Blog.js';
+import {
+  createBlog,
+  deleteBlogById,
+  getAllBlogs,
+  getBlogById,
+  togglePublish
+} from '../controllers/blogControllers.js';
+import { updateBlog } from '../controllers/blogControllers.js';
 
-const router = express.Router();
+import upload from '../middleware/multer.js';
+import auth from '../middleware/auth.js';
 
-// GET all blogs
-router.get('/', async (req, res) => {
-  try {
-    const blogs = await Blog.find().sort({ date: -1 });
-    res.json(blogs);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+const blogRouter = express.Router();
+
+blogRouter.post('/add', upload.single('image'), createBlog);
+blogRouter.put('/update/:id', upload.single('image'), updateBlog);
+blogRouter.get('/all', getAllBlogs);
+blogRouter.get('/:blogId', getBlogById);
+blogRouter.post('/delete',  deleteBlogById);
+blogRouter.post('/toggle-publish',  togglePublish);
+
+blogRouter.get('/dummy', (req, res) => {
+  res.json({
+    success: true,
+    blogs: [
+      {
+        _id: "1",
+        title: "Dummy Blog Title",
+        subTitle: "A dummy subtitle",
+        slug: "dummy-blog-title",
+        description: "This is a dummy blog description.",
+        category: "General",
+        image: "https://placehold.co/600x400",
+        date: new Date().toISOString(),
+        author: "Admin",
+        isPublished: true
+      },
+      {
+        _id: "2",
+        title: "Second Dummy Blog",
+        subTitle: "Another subtitle",
+        slug: "second-dummy-blog",
+        description: "Another dummy blog description.",
+        category: "Tech",
+        image: "https://placehold.co/600x400",
+        date: new Date().toISOString(),
+        author: "Admin",
+        isPublished: false
+      }
+    ]
+  });
 });
 
-// GET one blog
-router.get('/:id', async (req, res) => {
-  try {
-    const blog = await Blog.findById(req.params.id);
-    if (!blog) return res.status(404).json({ message: 'Blog not found' });
-    res.json(blog);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
-
-// GET blog by slug
-router.get('/slug/:slug', async (req, res) => {
-  try {
-    const blog = await Blog.findOne({ slug: req.params.slug });
-    if (!blog) return res.status(404).json({ message: 'Blog not found' });
-    res.json(blog);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
-
-// POST new blog
-router.post('/', async (req, res) => {
-  try {
-    const blog = new Blog(req.body);
-    const saved = await blog.save();
-    res.status(201).json(saved);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
-
-// PUT update blog
-router.put('/:id', async (req, res) => {
-  try {
-    const updated = await Blog.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(updated);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
-
-// DELETE blog
-router.delete('/:id', async (req, res) => {
-  try {
-    await Blog.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Blog deleted' });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-export default router;
+export default blogRouter;
