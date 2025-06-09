@@ -9,16 +9,19 @@ import {
 import { updateBlog } from '../controllers/blogControllers.js';
 
 import upload from '../middleware/multer.js';
-import auth from '../middleware/auth.js';
 
 const blogRouter = express.Router();
 
 blogRouter.post('/add', upload.single('image'), createBlog);
 blogRouter.put('/update/:id', upload.single('image'), updateBlog);
 blogRouter.get('/all', getAllBlogs);
-blogRouter.get('/:blogId', getBlogById);
-blogRouter.post('/delete',  deleteBlogById);
+blogRouter.get('/:id', getBlogById);
+blogRouter.delete('/:id',  deleteBlogById);
 blogRouter.post('/toggle-publish',  togglePublish);
+
+export default blogRouter;
+
+/*
 
 blogRouter.get('/dummy', (req, res) => {
   res.json({
@@ -52,4 +55,4 @@ blogRouter.get('/dummy', (req, res) => {
   });
 });
 
-export default blogRouter;
+*/ 
