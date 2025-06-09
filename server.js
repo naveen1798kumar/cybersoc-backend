@@ -29,13 +29,13 @@ app.get('/', (req, res) => {
 });
 
 // Blog routes
-app.use('/api/blogs', blogRoutes);
+app.use('/blogs', blogRoutes);
 
 // Category routes
-app.use('/api/categories', categoryRoutes);
+app.use('/categories', categoryRoutes);
 
 // Service routes
-app.use('/api/services', serviceRoutes); // <-- Add this line
+app.use('/services', serviceRoutes); // <-- Add this line
 
 // Server listen
 const PORT = process.env.PORT || 5000;

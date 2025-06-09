@@ -4,14 +4,10 @@ import fs from 'fs';
 
 export const createBlog = async (req, res) => {
   try {
-    if (!req.body.blog) {
-      return res.status(400).json({ success: false, message: 'No blog data provided' });
-    }
-
     const {
       title, subTitle, slug, description,
       category, author, isPublished
-    } = JSON.parse(req.body.blog);
+    } = req.body;
 
     const imageFile = req.file;
 
@@ -31,6 +27,9 @@ export const createBlog = async (req, res) => {
       folder: '/blog_images'
     });
 
+    // Clean up the temp file
+    fs.unlinkSync(imageFile.path);
+
     const image = imagekit.url({
       path: response.filePath,
       transformation: [
@@ -44,32 +43,28 @@ export const createBlog = async (req, res) => {
       title,
       subTitle,
       slug,
-      
       description,
-      
       category,
       author,
       image,
-      isPublished: isPublished ?? false,
-      
+      isPublished: isPublished === 'true' // handle string "true"/"false"
     });
 
     res.json({ success: true, message: 'Blog created successfully' });
 
   } catch (error) {
+    console.error('Create Blog Error:', error);
     return res.status(500).json({ success: false, message: 'Something went wrong', error: error.message });
   }
 };
 
+
 export const updateBlog = async (req, res) => {
   try {
-    if (!req.body.blog) {
-      return res.status(400).json({ success: false, message: 'No blog data provided' });
-    }
     const {
       title, subTitle, slug, description,
       category, author, isPublished
-    } = JSON.parse(req.body.blog);
+    } = req.body;
 
     const imageFile = req.file;
     const updateData = {
@@ -79,7 +74,7 @@ export const updateBlog = async (req, res) => {
       description,
       category,
       author,
-      isPublished: isPublished ?? false
+      isPublished: isPublished === 'true'
     };
 
     if (imageFile) {
@@ -89,6 +84,10 @@ export const updateBlog = async (req, res) => {
         fileName: imageFile.originalname,
         folder: '/blog_images'
       });
+
+      // Clean up the temp file
+      fs.unlinkSync(imageFile.path);
+
       updateData.image = imagekit.url({
         path: response.filePath,
         transformation: [
@@ -103,15 +102,18 @@ export const updateBlog = async (req, res) => {
     if (!updated) {
       return res.status(404).json({ success: false, message: 'Blog not found' });
     }
+
     res.json({ success: true, message: 'Blog updated successfully', blog: updated });
   } catch (error) {
+    console.error('Update Blog Error:', error);
     return res.status(500).json({ success: false, message: 'Something went wrong', error: error.message });
   }
 };
 
+
 export const getAllBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find({ isPublished: true }).sort({ createdAt: -1 });
+    const blogs = await Blog.find().sort({ createdAt: -1 });
     res.json({ success: true, blogs });
   } catch (error) {
     return res.status(500).json({ success: false, message: 'Something went wrong', error: error.message });
@@ -120,8 +122,8 @@ export const getAllBlogs = async (req, res) => {
 
 export const getBlogById = async (req, res) => {
   try {
-    const { blogId } = req.params;
-    const blog = await Blog.findById(blogId);
+    const { id } = req.params;
+    const blog = await Blog.findById(id);
     if (!blog) {
       return res.status(404).json({ success: false, message: 'Blog not found' });
     }
@@ -133,7 +135,7 @@ export const getBlogById = async (req, res) => {
 
 export const deleteBlogById = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     await Blog.findByIdAndDelete(id);
     res.json({ success: true, message: 'Blog deleted successfully' });
   } catch (error) {
