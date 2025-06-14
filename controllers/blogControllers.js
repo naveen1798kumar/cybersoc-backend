@@ -161,3 +161,15 @@ export const togglePublish = async (req, res) => {
     return res.status(500).json({ success: false, message: 'Something went wrong', error: error.message });
   }
 };
+
+export const getBlogBySlug = async (req, res) => {
+  try {
+    const blog = await Blog.findOne({ slug: req.params.slug });
+    if (!blog) {
+      return res.status(404).json({ success: false, message: "Blog not found" });
+    }
+    res.status(200).json({ success: true, blog });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server Error", error: error.message });
+  }
+};

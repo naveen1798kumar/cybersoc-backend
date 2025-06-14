@@ -4,7 +4,8 @@ import {
   deleteBlogById,
   getAllBlogs,
   getBlogById,
-  togglePublish
+  togglePublish,
+  getBlogBySlug 
 } from '../controllers/blogControllers.js';
 import { updateBlog } from '../controllers/blogControllers.js';
 
@@ -16,6 +17,8 @@ blogRouter.post('/add', upload.single('image'), createBlog);
 blogRouter.put('/update/:id', upload.single('image'), updateBlog);
 blogRouter.get('/all', getAllBlogs);
 blogRouter.get('/:id', getBlogById);
+blogRouter.get('/slug/:slug', getBlogBySlug);
+
 blogRouter.delete('/:id',  deleteBlogById);
 blogRouter.post('/toggle-publish',  togglePublish);
 
