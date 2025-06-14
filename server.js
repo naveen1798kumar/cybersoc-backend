@@ -30,6 +30,7 @@ app.get('/', (req, res) => {
 
 // Blog routes
 app.use('/blogs', blogRoutes);
+app.use('/api/blogs', blogRoutes); 
 
 // Category routes
 app.use('/categories', categoryRoutes);
