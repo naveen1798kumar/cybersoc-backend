@@ -173,3 +173,13 @@ export const getBlogBySlug = async (req, res) => {
     res.status(500).json({ success: false, message: "Server Error", error: error.message });
   }
 };
+
+export const getPublishedBlogs = async (req, res) => {
+  try {
+    const blogs = await Blog.find({ isPublished: true });
+    res.json({ success: true, blogs });
+  } catch (error) {
+    console.error('Error fetching published blogs:', error); 
+    return res.status(500).json({ success: false, message: 'Failed to fetch published blogs', error: error.message });
+  }
+};

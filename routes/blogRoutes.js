@@ -5,7 +5,8 @@ import {
   getAllBlogs,
   getBlogById,
   togglePublish,
-  getBlogBySlug 
+  getBlogBySlug,
+  getPublishedBlogs
 } from '../controllers/blogControllers.js';
 import { updateBlog } from '../controllers/blogControllers.js';
 
@@ -21,6 +22,7 @@ blogRouter.get('/slug/:slug', getBlogBySlug);
 
 blogRouter.delete('/:id',  deleteBlogById);
 blogRouter.post('/toggle-publish',  togglePublish);
+blogRouter.get('/blogs/published', getPublishedBlogs);
 
 export default blogRouter;
 
