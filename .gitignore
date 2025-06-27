@@ -7,18 +7,56 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Dependency directories
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+.out/
+.next/
+coverage/
+
+# Environment variables
+.env
+.env.*.local
 *.local
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Python (for cleanup tools like git-filter-repo)
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.egg
+*.egg-info/
+.eggs/
+*.manifest
+*.spec
+*.dist-info/
+pip-log.txt
+python*.dll
+venv/
+env/
+ENV/
+.Python
+
+# OS-specific
 .DS_Store
+Thumbs.db
+
+# IDEs & editors
+.vscode/
+!.vscode/extensions.json
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# Optional: PM2 logs and config
+pids/
+*.pid
+*.seed
+dump.rdb
