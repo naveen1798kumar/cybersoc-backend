@@ -14,15 +14,18 @@ import upload from '../middleware/multer.js';
 
 const blogRouter = express.Router();
 
+blogRouter.get('/published', getPublishedBlogs);
+blogRouter.get('/slug/:slug', getBlogBySlug);
+
+blogRouter.get('/', getAllBlogs);
+blogRouter.get('/:id', getBlogById);
+
 blogRouter.post('/add', upload.single('image'), createBlog);
 blogRouter.put('/update/:id', upload.single('image'), updateBlog);
-blogRouter.get('/all', getAllBlogs);
-blogRouter.get('/:id', getBlogById);
-blogRouter.get('/slug/:slug', getBlogBySlug);
+
 
 blogRouter.delete('/:id',  deleteBlogById);
 blogRouter.post('/toggle-publish',  togglePublish);
-blogRouter.get('/blogs/published', getPublishedBlogs);
 
 export default blogRouter;
 

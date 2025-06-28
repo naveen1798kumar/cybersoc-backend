@@ -7,7 +7,7 @@ import categoryRoutes from './routes/categoryRoutes.js';
 import serviceRoutes from './routes/serviceRoutes.js'; // <-- Add this line
 import nodemailer from 'nodemailer';
 import emailRoutes from './routes/emailRoute.js';
-
+import jobRoutes from './routes/jobRoutes.js';
 
 
 dotenv.config();
@@ -44,13 +44,15 @@ app.use('/services', serviceRoutes); // <-- Add this line
 
 app.use('/api', emailRoutes);
 
+app.use('/api/jobs', jobRoutes);
+
 // Server listen
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
 
-app.post('/api/send-email', async (req, res) => {
+app.post('/send-email', async (req, res) => {
   const { name, email, message } = req.body;
 
   // Create the transporter using Hostinger SMTP

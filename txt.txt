@@ -1,0 +1,20 @@
+PORT=5000
+
+# 2RQj81hhwSJb76BE  //  Atlas password
+
+MONGO_URI=mongodb+srv://cybersocsolutions:Cybersoc2024@cybersocwebpage.zdszs7c.mongodb.net/cyber-soc?retryWrites=true&w=majority&appName=CybersocWebpage
+
+#mongodb+srv://cybersocsolutions:<db_password>@cybersocwebpage.zdszs7c.mongodb.net/?retryWrites=true&w=majority&appName=CybersocWebpage
+
+# ______________________________
+
+# imagekit keys
+IMAGEKIT_PUBLIC_KEY = public_u/u4AIvv/bZDMQSMQElbtxOFIkw=
+IMAGEKIT_PRIVATE_KEY = private_X2d/QwHTJCjMaa7CsYByXMCf4iU=   
+IMAGEKIT_URL_ENDPOINT = https://ik.imagekit.io/cybersoc
+
+# 
+EMAIL_HOST=smtp.hostinger.com
+EMAIL_PORT=465
+EMAIL_USER=operations@cybersocsolutions.com
+EMAIL_PASS=Cybersoc@2024

@@ -47,7 +47,7 @@ export const createBlog = async (req, res) => {
       category,
       author,
       image,
-      isPublished: isPublished === 'true' // handle string "true"/"false"
+      isPublished: isPublished === true // handle string "true"/"false"
     });
 
     res.json({ success: true, message: 'Blog created successfully' });
@@ -74,7 +74,7 @@ export const updateBlog = async (req, res) => {
       description,
       category,
       author,
-      isPublished: isPublished === 'true'
+      isPublished: isPublished === true
     };
 
     if (imageFile) {
@@ -176,7 +176,15 @@ export const getBlogBySlug = async (req, res) => {
 
 export const getPublishedBlogs = async (req, res) => {
   try {
+    console.log("Fetching published blogs...");
+    // Optional: Check if Blog model is connected
+    if (!Blog) {
+      throw new Error("Blog model not found or not imported correctly.");
+    }
+
     const blogs = await Blog.find({ isPublished: true });
+    console.log("Found blogs:", blogs.length);
+    
     res.json({ success: true, blogs });
   } catch (error) {
     console.error('Error fetching published blogs:', error); 
