@@ -13,14 +13,54 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Get single job by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id);
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+    res.json(job);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching job", error: err });
+  }
+});
+
 // Create new job
 router.post('/', async (req, res) => {
-  const { title, location, type, description } = req.body;
+  const {
+    title,
+    minQualification,
+    openings,
+    experience,
+    location,
+    timing,
+    shift,
+    salary,
+    type,
+    skills,
+    description,
+  } = req.body;
+
   try {
-    const job = new Job({ title, location, type, description });
+    const job = new Job({
+      title,
+      minQualification,
+      openings,
+      experience,
+      location,
+      timing,
+      shift,
+      salary,
+      type,
+      skills,
+      description,
+    });
+
     await job.save();
     res.status(201).json(job);
   } catch (err) {
+    console.error("❌ Job creation error:", err.message);
     res.status(400).json({ message: "Invalid job data", error: err });
   }
 });
@@ -37,11 +77,35 @@ router.delete('/:id', async (req, res) => {
 
 // Update a job
 router.put('/:id', async (req, res) => {
-  const { title, location, type, description } = req.body;
+  const {
+    title,
+    minQualification,
+    openings,
+    experience,
+    location,
+    timing,
+    shift,
+    salary,
+    type,
+    skills,
+    description,
+  } = req.body;
   try {
     const updated = await Job.findByIdAndUpdate(
       req.params.id,
-      { title, location, type, description },
+      {
+        title,
+        minQualification,
+        openings,
+        experience,
+        location,
+        timing,
+        shift,
+        salary,
+        type,
+        skills,
+        description,
+      },
       { new: true }
     );
     res.json(updated);

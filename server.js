@@ -4,11 +4,13 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import blogRoutes from './routes/blogRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
-import serviceRoutes from './routes/serviceRoutes.js'; // <-- Add this line
+import serviceRoutes from './routes/serviceRoutes.js';
 import nodemailer from 'nodemailer';
 import emailRoutes from './routes/emailRoute.js';
 import jobRoutes from './routes/jobRoutes.js';
-
+import careerRoutes from './routes/careerRoutes.js'; // ✅ New career route
+import resumeUploadRoutes from './routes/resumeUpload.js';
+import imageUploadRoutes from './routes/imageUpload.js';
 
 dotenv.config();
 
@@ -17,7 +19,7 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
-// Connect to MongoDB
+// MongoDB Connection
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/cyber-soc', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -32,41 +34,32 @@ app.get('/', (req, res) => {
   res.send('✅ API is running');
 });
 
-// Blog routes
+// Routes
 app.use('/blogs', blogRoutes);
-app.use('/api/blogs', blogRoutes); 
-
-// Category routes
-app.use('/categories', categoryRoutes);
-
-// Service routes
-app.use('/services', serviceRoutes); // <-- Add this line
-
+app.use('/api/blogs', blogRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/services', serviceRoutes);
 app.use('/api', emailRoutes);
-
 app.use('/api/jobs', jobRoutes);
+app.use('/api/career', careerRoutes); // ✅ Career application route
+app.use('/api/upload/resume', resumeUploadRoutes);
 
-// Server listen
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+app.use('/api/upload/image', imageUploadRoutes);
 
+// Contact Email
 app.post('/send-email', async (req, res) => {
   const { name, email, message } = req.body;
 
-  // Create the transporter using Hostinger SMTP
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: Number(process.env.EMAIL_PORT),
-    secure: true, // true for port 465
+    secure: true,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
   });
 
-  // Compose the message
   const mailOptions = {
     from: `"${name}" <${email}>`,
     to: process.env.EMAIL_USER,
@@ -86,4 +79,10 @@ app.post('/send-email', async (req, res) => {
     console.error("❌ Email send failed:", error);
     res.status(500).json({ success: false, message: "Email failed to send." });
   }
+});
+
+// Start Server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
