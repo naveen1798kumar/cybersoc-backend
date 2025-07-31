@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Service from '../model/Services.js';
 
 // Get all services (optionally filter by category)
@@ -11,10 +12,18 @@ export const getServices = async (req, res) => {
   }
 };
 
-// Get a single service by ID
+// Get a single service by ID or slug
 export const getServiceById = async (req, res) => {
   try {
-    const service = await Service.findById(req.params.id).populate('category');
+    let service = null;
+    // Check if param is a valid ObjectId
+    if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+      service = await Service.findById(req.params.id).populate('category');
+    }
+    // If not found by ID, try by slug
+    if (!service) {
+      service = await Service.findOne({ id: req.params.id }).populate('category');
+    }
     if (!service) return res.status(404).json({ message: 'Service not found' });
     res.json(service);
   } catch (error) {

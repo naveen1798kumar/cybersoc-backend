@@ -5,6 +5,7 @@ import slugify from 'slugify';
 const SectionSchema = new mongoose.Schema({
   title: String,
   content: String,
+  image: String, // ✅ New field
 }, { _id: false });
 
 const FeatureSchema = new mongoose.Schema({
@@ -15,6 +16,7 @@ const FeatureSchema = new mongoose.Schema({
 const FAQSchema = new mongoose.Schema({
   question: String,
   answer: String,
+  image: String, // ✅ New field
 }, { _id: false });
 
 const ServiceSchema = new mongoose.Schema({
@@ -23,12 +25,13 @@ const ServiceSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: String,
   image: String,
-  serviceImage: String,        // optional
-  serviceImageFAQ: String,     // optional
-  sections: [SectionSchema],   // array of { title, content }
-  benefits: [String],          // array of strings
-  features: [FeatureSchema],   // array of { title, description }
-  faqs: [FAQSchema],           // array of { question, answer }
+  bannerImage: String,        // ✅ New: Banner image (main heading banner)
+  serviceImage: String,
+  serviceImageFAQ: String,
+  sections: [SectionSchema],
+  benefits: [String],
+  features: [FeatureSchema],
+  faqs: [FAQSchema],
 }, { timestamps: true });
 
 ServiceSchema.pre('save', function (next) {
