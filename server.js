@@ -20,7 +20,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/cyber-soc', {
+mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://cybersocsolutions:Cybersoc2024@cybersocwebpage.zdszs7c.mongodb.net/cyber-soc?retryWrites=true&w=majority&appName=CybersocWebpage', {
   // useNewUrlParser: true,
   // useUnifiedTopology: true,
 }).then(() => {
