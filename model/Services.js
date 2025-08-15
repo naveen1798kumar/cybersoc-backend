@@ -5,7 +5,7 @@ import slugify from 'slugify';
 const SectionSchema = new mongoose.Schema({
   title: String,
   content: String,
-  image: String, // ✅ New field
+  image: String, 
 }, { _id: false });
 
 const FeatureSchema = new mongoose.Schema({
@@ -16,22 +16,33 @@ const FeatureSchema = new mongoose.Schema({
 const FAQSchema = new mongoose.Schema({
   question: String,
   answer: String,
-  image: String, // ✅ New field
 }, { _id: false });
 
 const ServiceSchema = new mongoose.Schema({
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'ServiceCategory', required: true },
-  id: { type: String, unique: true }, // e.g. "static-website"
+  id: { type: String, unique: true }, // slug from title
   title: { type: String, required: true },
+  summary: String, // ✅ short intro under title
   description: String,
-  image: String,
-  bannerImage: String,        // ✅ New: Banner image (main heading banner)
-  serviceImage: String,
-  serviceImageFAQ: String,
-  sections: [SectionSchema],
-  benefits: [String],
-  features: [FeatureSchema],
-  faqs: [FAQSchema],
+  image: String, // optional thumbnail
+  bannerImage: String, // ✅ hero section background image
+
+  benefits: [String], // ✅ key benefits list
+  benefitsImage: String, // ✅ image for benefits section
+
+  sections: [SectionSchema], // ✅ multiple content sections
+
+  features: [FeatureSchema], // ✅ feature list
+
+  faqImage: String, // ✅ single image for FAQ section
+  faqs: [FAQSchema], // ✅ list of FAQ items
+
+  galleryEnabled: { type: Boolean, default: false }, // ✅ toggle for gallery
+  gallery: [String], // ✅ multiple images for gallery
+
+  metaTitle: String, // ✅ SEO
+  metaDescription: String, // ✅ SEO
+  keywords: String, // ✅ SEO
 }, { timestamps: true });
 
 ServiceSchema.pre('save', function (next) {
