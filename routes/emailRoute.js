@@ -6,7 +6,7 @@ dotenv.config();
 const router = express.Router();
 
 router.post('/send-email', async (req, res) => {
-  const { name, email, message, service } = req.body;
+  const { name, email, message, service, mobile, address } = req.body;
 
   try {
     const transporter = nodemailer.createTransport({
